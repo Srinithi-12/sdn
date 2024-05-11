@@ -1,0 +1,80 @@
+//Install mininet
+sudo apt-get install mininet
+
+//Install openswitch
+sudo apt-get install openvswitch-switch
+sudo service openvswitch-switch start
+
+//Test Openswitch
+sudo mn --switch ovsbr --test pingall
+
+//clone and install
+git clone https://github.com/mininet/mininet
+mininet/util/install.sh -fw
+
+myfirsttopo.py
+from mininet.topo import Topo		
+class MyFirstTopo( Topo ):		
+	def __init__( self ):		
+ 		Topo.__init__( self )		
+ 				
+ 		h1 = self.addHost( 'h1' )		
+		h2 = self.addHost( 'h2' )		
+		h3 = self.addHost( 'h3' )		
+		h4 = self.addHost( 'h4' )		
+		leftSwitch = self.addSwitch( 's1' )		
+		rightSwitch = self.addSwitch( 's2' )		
+								
+ 		self.addLink( h1, leftSwitch )		
+		self.addLink( h2, leftSwitch )		
+		self.addLink( leftSwitch, rightSwitch )		
+		self.addLink( rightSwitch, h3 )		
+		self.addLink( rightSwitch, h4 )		
+
+topos = { 'myfirsttopo': ( lambda: MyFirstTopo() ) }	
+
+sudo mn --custom myfirsttopo.py --topo myfirsttopo
+
+
+
+
+from mininet.topo import Topo
+
+class MyFirstTopo( Topo ):
+  def __init__( self ):
+           # Initialize topology
+           Topo.__init__( self )
+           # Add hosts and switches
+           h1 = self.addHost( 'h1' )
+           h2 = self.addHost( 'h2' )
+           h3 = self.addHost( 'h3' )
+           h4 = self.addHost( 'h4' )
+           leftSwitch = self.addSwitch( 's1' )
+           rightSwitch = self.addSwitch( 's2' )
+           # Add links
+           self.addLink( h1, leftSwitch )
+           self.addLink( h2, leftSwitch )
+           self.addLink( leftSwitch, rightSwitch )
+           self.addLink( rightSwitch, h3 )
+           self.addLink( rightSwitch, h4 )
+
+topos = { 'myfirsttopo': ( lambda: MyFirstTopo() ) }
+
+
+mininet> dump
+
+<Host h1: h1-eth0:10.0.0.1 pid=266151>
+<Host h2: h2-eth0:10.0.0.2 pid=266153>
+<Host h3: h3-eth0:10.0.0.3 pid=266155>
+<Host h4: h4-eth0:10.0.0.4 pid=266157>
+<OVSSwitch s1: lo:127.0.0.1,s1-eth1:None,s1-eth2:None,s1-eth3:None pid=266162>
+<OVSSwitch s2: lo:127.0.0.1,s2-eth1:None,s2-eth2:None,s2-eth3:None pid=266165>
+<Controller c0: 127.0.0.1:6653 pid=266144>
+
+link
+
+h1-eth0<->s1-eth1 (OK OK)
+h2-eth0<->s1-eth2 (OK OK)
+s1-eth3<->s2-eth1 (OK OK)
+s2-eth2<->h3-eth0 (OK OK)
+s2-eth3<->h4-eth0 (OK OK)
